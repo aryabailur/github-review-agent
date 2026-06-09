@@ -5,11 +5,14 @@ from mcp.client.stdio import stdio_client
 from langgraph.prebuilt import create_react_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
 from agents.orchestrator import GraphState
+from dotenv import load_dotenv
+load_dotenv()
 
 llm=ChatGoogleGenerativeAI(model="gemini-2.0-flash")
 
 @tool
 def get_full_file(repo_name:str,file_path:str)->str:
+    """Gets the full content of a file from the repository for deeper context during review"""
     async def call_tool():
     
       server_params=StdioServerParameters(
