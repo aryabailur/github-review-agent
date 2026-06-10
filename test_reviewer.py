@@ -15,5 +15,5 @@ dummy_state = {
     "test_metadata": [],
     "summary_metadata": ""
 }
-result=asyncio(reviewer_node(dummy_state))
+result=reviewer_node(dummy_state)
 print(result)

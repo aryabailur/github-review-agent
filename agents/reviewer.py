@@ -3,12 +3,11 @@ import asyncio
 from mcp import ClientSession,StdioServerParameters
 from mcp.client.stdio import stdio_client
 from langgraph.prebuilt import create_react_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 from agents.orchestrator import GraphState
 from dotenv import load_dotenv
 load_dotenv()
-
-llm=ChatGoogleGenerativeAI(model="gemini-2.0-flash")
+from langchain_groq import ChatGroq
+llm = ChatGroq(model="llama-3.3-70b-versatile")
 
 @tool
 def get_full_file(repo_name:str,file_path:str)->str:
