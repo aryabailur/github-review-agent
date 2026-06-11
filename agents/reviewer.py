@@ -3,7 +3,7 @@ import asyncio
 from mcp import ClientSession,StdioServerParameters
 from mcp.client.stdio import stdio_client
 from langgraph.prebuilt import create_react_agent
-from agents.orchestrator import GraphState
+from agents.state import GraphState
 from dotenv import load_dotenv
 load_dotenv()
 from langchain_groq import ChatGroq
@@ -81,4 +81,4 @@ def reviewer_node(state:GraphState):
          ]
       }
    )
-   return {"review_metadata":result["messages"][-1].content}
+   return {"review_metadata":[result["messages"][-1].content]}

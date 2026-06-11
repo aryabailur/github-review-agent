@@ -1,19 +1,19 @@
 from mcp import ClientSession,StdioServerParameters
 from mcp.client.stdio import stdio_client
-from agents.orchestrator import GraphState
+from agents.state import GraphState
 import json
-
-async def fetcher_node(state:GraphState):
+import asyncio
+def fetcher_node(state:GraphState):
     server_params=StdioServerParameters(
     command="python",
     args=["mcp_server/server.py"]
      )
-
-    async with stdio_client(server_params) as (
+    async def fetch():
+       async with stdio_client(server_params) as (
     read_stream,
     write_stream,
     ):
-       async with ClientSession(
+        async with ClientSession(
           read_stream,
           write_stream
         ) as session:
@@ -36,6 +36,7 @@ async def fetcher_node(state:GraphState):
                "pr_metadata": json.loads(result1.content[0].text) ,
                "diff_files":json.loads(result2.content[0].text)
            }
+    return asyncio.run(fetch())
        
        
     

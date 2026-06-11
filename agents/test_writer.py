@@ -1,5 +1,5 @@
 from langchain_groq import ChatGroq
-from agents.orchestrator import GraphState
+from agents.state import GraphState
 from langchain_core.messages import (SystemMessage,HumanMessage)
 from dotenv import load_dotenv
 load_dotenv()

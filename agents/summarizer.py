@@ -1,6 +1,6 @@
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from agents.orchestrator import GraphState
+from agents.state import GraphState
 from mcp import (StdioServerParameters,stdio_client)
 from mcp import ClientSession
 from langchain_core.messages import (SystemMessage,HumanMessage)
@@ -12,14 +12,28 @@ llm = ChatGroq(model="llama-3.3-70b-versatile")
 def summarizer_node(state:GraphState):
     review_metadata=state["review_metadata"]
     test_metadata=state["test_metadata"]
-    summary=llm.invoke([
-        SystemMessage(
-            content="Summarize the given content as best as possible"
-        ),
-        HumanMessage(
-            content=f"summarize this for me: \n\n {review_metadata} \n\n {test_metadata}"
-        )
-    ])
+    summary = llm.invoke([
+    SystemMessage(
+        content="""You are a senior code reviewer writing a final PR review comment for GitHub.
+        
+Your job is to compile the findings and test suggestions into a clean, structured review comment.
+
+Format your response exactly like this:
+## Code Review Summary
+
+### Issues Found
+List each issue with severity and description
+
+### Suggested Tests
+List the suggested test cases
+
+### Overall Assessment
+One paragraph summary of the PR quality and what needs to be fixed before merging."""
+    ),
+    HumanMessage(
+        content=f"Compile this into a final GitHub PR review comment:\n\nFindings:\n{review_metadata}\n\nTest Suggestions:\n{test_metadata}"
+    )
+])
     async def mcp_call():
         system_params=StdioServerParameters(
             command="python",
